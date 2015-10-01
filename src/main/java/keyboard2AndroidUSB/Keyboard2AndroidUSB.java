@@ -23,15 +23,12 @@ public class Keyboard2AndroidUSB extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Keyboard");
-        Scene scene = new Scene(label, 300, 275);
+        Scene scene = new Scene(new Label(), 300, 275);
         primaryStage.setScene(scene);
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
+        scene.setOnKeyPressed((KeyEvent e) -> {
                 System.out.println("hello: " + e);
-            }
-        });
+            });
 
         primaryStage.show();
     }
