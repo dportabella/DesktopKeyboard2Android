@@ -26,12 +26,15 @@ public class Keyboard2AndroidUSB extends Application {
         Scene scene = new Scene(new Label(), 300, 275);
         primaryStage.setScene(scene);
 
-        scene.setOnKeyPressed((KeyEvent e) -> {
-                System.out.println("hello: " + e);
-            });
+        scene.setOnKeyPressed((KeyEvent e) -> handleKeyEvent(e));
 
         primaryStage.show();
     }
+
+    private void handleKeyEvent(KeyEvent e) {
+        System.out.println("hello: " + e);
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
