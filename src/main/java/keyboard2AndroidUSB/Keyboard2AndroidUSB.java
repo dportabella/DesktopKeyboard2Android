@@ -1,21 +1,9 @@
 package keyboard2AndroidUSB;
 
 import javafx.application.Application;
-import javafx.scene.input.KeyEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class Keyboard2AndroidUSB extends Application {
@@ -26,16 +14,12 @@ public class Keyboard2AndroidUSB extends Application {
         Scene scene = new Scene(new Label(), 300, 275);
         primaryStage.setScene(scene);
 
-        scene.setOnKeyPressed((KeyEvent e) -> handleKeyEvent(e));
+        scene.setOnKeyPressed((KeyEvent e) -> System.out.println("key_pressed, code: " + e.getCode()));
+        scene.setOnKeyReleased((KeyEvent e) -> System.out.println("key_released, code: " + e.getCode()));
+        scene.setOnKeyTyped((KeyEvent e) -> System.out.println("key_typed, char: " + e.getCharacter()));
 
         primaryStage.show();
     }
 
-    private void handleKeyEvent(KeyEvent e) {
-        System.out.println("hello: " + e);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args) { launch(args); }
 }
