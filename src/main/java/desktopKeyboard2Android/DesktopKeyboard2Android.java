@@ -111,7 +111,7 @@ public class DesktopKeyboard2Android extends Application {
         String url = "http://localhost:7777/key?" + keySequence + "," + keyEventString + ",";
         List<String> lines = httpRequest(url);
         if (lines.size() != 1 || !"ok".equals(lines.get(0))) {
-            exit(new RuntimeException("unexpected response from android WifiKeyboard app: " + lines));
+            warn(new RuntimeException("unexpected response from android WifiKeyboard app: " + lines));
         }
     }
 
@@ -122,16 +122,14 @@ public class DesktopKeyboard2Android extends Application {
                 return in.lines().collect(Collectors.toList());
             }
         } catch (IOException e) {
-            exit(new RuntimeException("connection to androidWifiKeyboard app failed", e));
-            return null;
+            throw new RuntimeException("connection to androidWifiKeyboard app failed", e);
         }
     }
 
-    private void exit(Throwable e) {
-        logger.error("exiting", e);
-        System.exit(1);
-
+    private void warn(Throwable e) {
+        logger.warn("warn", e);
     }
+
     public static void main(String[] args) {
         launch(args);
     }
