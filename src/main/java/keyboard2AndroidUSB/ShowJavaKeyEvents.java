@@ -20,7 +20,7 @@ I've implemented this logic based on experimenting.
 
 - note for instance, the enter (0x0A), the backspace (0x08), the space (0x20) keys produce both a key_pressed/key_released and a key_typed event.
 */
-public class Keyboard2AndroidUSB extends Application {
+public class ShowJavaKeyEvents extends Application {
     final int LAST_KEY_CODE_AS_CONTROL_EVENT = KeyCode.DOWN.impl_getCode(); // 0x28
     final int LAST_CHAR_AS_CONTROL_EVENT = (int) ' '; // 0x20
 
