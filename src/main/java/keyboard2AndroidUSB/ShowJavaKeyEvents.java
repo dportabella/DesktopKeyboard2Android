@@ -31,21 +31,15 @@ public class ShowJavaKeyEvents extends Application {
         primaryStage.setScene(scene);
 
         scene.setOnKeyPressed((KeyEvent e) -> {
-            if (handleAsControlEvent(e.getCode())) {
-                System.out.println("key_pressed, code: " + keyCodeToString(e.getCode()));
-            }
+            System.out.println("key_pressed, code: " + keyCodeToString(e.getCode()) + ", forward: " + handleAsControlEvent(e.getCode()));
         });
 
         scene.setOnKeyReleased((KeyEvent e) -> {
-            if (handleAsControlEvent(e.getCode())) {
-                System.out.println("key_released, code: " + keyCodeToString(e.getCode()));
-            }
+            System.out.println("key_released, code: " + keyCodeToString(e.getCode()) + ", forward: " + handleAsControlEvent(e.getCode()));
         });
 
         scene.setOnKeyTyped((KeyEvent e) -> {
-            if (handleAsTypedEvent(e.getCharacter())) {
-                System.out.println("key_typed, char: " + e.getCharacter());
-            }
+            System.out.println("key_typed, char: " + keyCharToString(e) + ", forward: " + handleAsTypedEvent(e.getCharacter()));
         });
 
         primaryStage.show();
@@ -64,6 +58,12 @@ public class ShowJavaKeyEvents extends Application {
         sp.append("[name: " + keyCode.getName() + ", code: " + keyCode.impl_getCode() + ", char: " + keyCode.impl_getChar() + "]");
         return sp.toString();
     }
+
+    private String keyCharToString(KeyEvent e) {
+        String c = e.getCharacter();
+        return "[char: " + c + ", codePoint: " + c.codePointAt(0) + "]";
+    }
+
 
     public static void main(String[] args) { launch(args); }
 }
