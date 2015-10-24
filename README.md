@@ -34,9 +34,7 @@ To build the installer for this application:
 
 
 ## Todo
-* Create installer
 * Replace the GUI window by a system tray icon
-* Forward Ctrl codes and the like, example Crtl-C & Crtl-V
 * Remove the need to first run the adb command
 * Put the key events in a queue, instead of blocking the application
 

@@ -44,6 +44,14 @@ public class DesktopKeyboard2Android extends Application {
     final int ENTER_CODE_POINT = 13;
     final int ENTER_ANDROID_CODE_POINT = 10;
 
+    /* used to store and, if necessary, later forward a key used with modifiers (such as Crtl)
+     * that has not been translated to a usefull typed key.
+     * For instance:
+     *   Crtl-V produces a KeyTyped event that is not forwarded. So lastIgnoredKeyCode will be forwarded.
+     *   Alt-g in a Swiss-French keyboard produces a KeyTyped event (@ character) that is forwarded. So lastIgnoredKeyCode will not be forwarded.
+     */
+    KeyCode lastIgnoredKeyCode = null;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Keyboard");
@@ -53,6 +61,9 @@ public class DesktopKeyboard2Android extends Application {
         scene.setOnKeyPressed((KeyEvent e) -> {
             if (handleAsControlEvent(e.getCode())) {
                 sendKeyPressed(e.getCode());
+                lastIgnoredKeyCode = null;
+            } else {
+                lastIgnoredKeyCode = e.getCode();
             }
         });
 
@@ -65,6 +76,10 @@ public class DesktopKeyboard2Android extends Application {
         scene.setOnKeyTyped((KeyEvent e) -> {
             if (handleAsTypedEvent(e.getCharacter())) {
                 sendKeyTyped(e.getCharacter());
+            } else if (lastIgnoredKeyCode != null) {
+                sendKeyPressed(lastIgnoredKeyCode);
+                sendKeyReleased(lastIgnoredKeyCode);
+                lastIgnoredKeyCode = null;
             }
         });
 
