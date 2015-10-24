@@ -1,4 +1,4 @@
-package keyboard2AndroidUSB;
+package desktopKeyboard2Android;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
