@@ -129,7 +129,7 @@ public class DesktopKeyboard2Android extends Application {
     }
 
     private void warn(Throwable e) {
-        logger.warn("warn", e);
+        logger.warn(e.toString());
     }
 
     public static void main(String[] args) {
