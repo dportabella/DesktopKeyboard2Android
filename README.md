@@ -9,22 +9,28 @@ This project replaces "the client", while still useing the android app. The diff
 * It works with non-US keyboards (eg, accents)
 
 
-In order to use it:
+## Use
 - Install the [WifiPassword](https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en) app
 - Follow its instructions to connect your laptop and android together through wifi or usb
 - Test that it works by browsing this web page from your laptop and type some text: [http://localhost:7777/](http://localhost:7777/)
-- Install and run this software, DesktopKeyboard2Android
+- Install and run the [latest release of DesktopKeyboard2Android](https://github.com/dportabella/DesktopKeyboard2Android/releases)
 - What you type now in your laptop, it will be forwarded to your Android
 
-This application has not an installer for the moment, so to install and run it:
+
+## Compile
+To debug this application:
 
     $ git clone git remote add origin https://github.com/dportabella/DesktopKeyboard2Android.git
     $ cd DesktopKeyboard2Android
     $ mvn exec:java -Dexec.mainClass="desktopKeyboard2Android.DesktopKeyboard2Android"
 
-To understand the app and show the java key events:
+To show the java key events and understand how they are filtered and mapped for Android:
 
     $ mvn exec:java -Dexec.mainClass="desktopKeyboard2Android.ShowJavaKeyEvents"
+
+To build the installer for this application:
+
+    $ mvn jfx:native
 
 
 ## Todo
