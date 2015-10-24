@@ -109,20 +109,22 @@ public class DesktopKeyboard2Android extends Application {
     private void sendKeyEvent(String keyEventString) {
         keySequence++;
         String url = "http://localhost:7777/key?" + keySequence + "," + keyEventString + ",";
-        List<String> lines = httpRequest(url);
+        List<String> lines;
+        try {
+            lines = httpRequest(url);
+        } catch (IOException e) {
+            warn(new IOException("connection to androidWifiKeyboard app failed", e));
+            return;
+        }
         if (lines.size() != 1 || !"ok".equals(lines.get(0))) {
-            warn(new RuntimeException("unexpected response from android WifiKeyboard app: " + lines));
+            warn(new Exception("unexpected response from android WifiKeyboard app: " + lines));
         }
     }
 
-    private List<String> httpRequest(String url) {
-        try {
-            HttpURLConnection httpc = (HttpURLConnection) new URL(url).openConnection();
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(httpc.getInputStream(), StandardCharsets.UTF_8))) {
-                return in.lines().collect(Collectors.toList());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("connection to androidWifiKeyboard app failed", e);
+    private List<String> httpRequest(String url) throws IOException {
+        HttpURLConnection httpc = (HttpURLConnection) new URL(url).openConnection();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(httpc.getInputStream(), StandardCharsets.UTF_8))) {
+            return in.lines().collect(Collectors.toList());
         }
     }
 
