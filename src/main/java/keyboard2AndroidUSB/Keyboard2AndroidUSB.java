@@ -40,6 +40,10 @@ public class Keyboard2AndroidUSB extends Application {
     final int LAST_KEY_CODE_AS_CONTROL_EVENT = KeyCode.DOWN.impl_getCode(); // 0x28
     final int LAST_CHAR_AS_CONTROL_EVENT = (int) ' '; // 0x20
 
+    final int ENTER_KEY_CODE = 10;
+    final int ENTER_CODE_POINT = 13;
+    final int ENTER_ANDROID_CODE_POINT = 10;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Keyboard");
@@ -68,11 +72,13 @@ public class Keyboard2AndroidUSB extends Application {
     }
 
     private boolean handleAsControlEvent(KeyCode keyCode) {
-        return (keyCode.impl_getCode() <= LAST_KEY_CODE_AS_CONTROL_EVENT);
+        int code = keyCode.impl_getCode();
+        return (code != ENTER_KEY_CODE && code <= LAST_KEY_CODE_AS_CONTROL_EVENT);
     }
 
     private boolean handleAsTypedEvent(String c) {
-        return (c.length() > 0 && (c.length() > 1 || c.charAt(0) > LAST_CHAR_AS_CONTROL_EVENT));
+        return ( (c.length() == 1 && c.charAt(0) == ENTER_CODE_POINT)  // enter key
+                || (c.length() > 0 && (c.length() > 1 || c.charAt(0) > LAST_CHAR_AS_CONTROL_EVENT)));
     }
 
     private String keyCodeToString(KeyCode keyCode) {
@@ -83,9 +89,11 @@ public class Keyboard2AndroidUSB extends Application {
 
     private int keySequence = 30000;
 
-    private void sendKeyTyped(String c) {
-        logger.debug("key_typed, char: " + c);
-        sendKeyEvent("C" + c.codePointAt(0));  // todo: is it possible to have more than one?
+    private void sendKeyTyped(String str) {
+        logger.debug("key_typed, char: " + str);
+        int c = str.codePointAt(0);   // todo: is it possible to have more than one?
+        int androidChar = (c == ENTER_CODE_POINT) ? ENTER_ANDROID_CODE_POINT : c;
+        sendKeyEvent("C" + androidChar);
     }
 
     private void sendKeyPressed(KeyCode keyCode) {
