@@ -6,7 +6,8 @@
 This project replaces "the client", while still using the android app. The differences are:
 * The client is a standalone software, instead of a web page
 * There are not parameters to set-up (so, no interaction with the application needed)
-* It works with non-US keyboards (eg, accents)
+* It works with non-US keyboards (eg, accents) while it also forwards combination keys.
+  So for example, you can copy a text from an android app and paste it to another app by using Crt-C & Crtl-V (as if the keyboard was attached directly to the phone, without a laptop being present)
 
 
 ## Use
