@@ -17,6 +17,8 @@ This project replaces "the client", while still using the android app. The diffe
 - Install and run the [latest release of DesktopKeyboard2Android](https://github.com/dportabella/DesktopKeyboard2Android/releases)
 - What you type now in your laptop, it will be forwarded to your Android
 
+You may want to use a hot key (eg Alt+Cmd+X) to launch or re-activate DesktopKeyboard2Android. Follow the instructions for [OSX](http://www.cnet.com/news/how-to-use-hot-keys-to-launch-applications-in-os-x/) or [MsWindows](https://www.google.com/search?hl=en&q=How+to+use+hot+keys+to+launch+applications+in+Ms+Windows).
+
 
 ## Compile
 To debug this application:
