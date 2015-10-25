@@ -1,7 +1,7 @@
 # DesktopKeyboard2Android
 ## Use your laptop's keyboard for typing in your Android phone
 
-[WifiPassword](https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en) is a great android app that lets you use your laptop's keyboard to type into your android. You connect your laptop and android together by wifi or usb. In your laptop, you use a web browser, "the client", to type into your android.
+[WifiKeyboard](https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en) is a great android app that lets you use your laptop's keyboard to type into your android. You connect your laptop and android together by wifi or usb. In your laptop, you use a web browser, "the client", to type into your android.
 
 This project replaces "the client", while still using the android app. The differences are:
 * The client is a standalone software, instead of a web page
@@ -11,7 +11,7 @@ This project replaces "the client", while still using the android app. The diffe
 
 
 ## Use
-- Install the [WifiPassword](https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en) app
+- Install the [WifiKeyboard](https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en) app
 - Follow its instructions to connect your laptop and android together through wifi or usb.
   this includes executing from the terminal: adb forward tcp:7777 tcp:7777
 - Test that it works by browsing this web page from your laptop and type some text: [http://localhost:7777/](http://localhost:7777/)
