@@ -11,7 +11,8 @@ This project replaces "the client", while still useing the android app. The diff
 
 ## Use
 - Install the [WifiPassword](https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en) app
-- Follow its instructions to connect your laptop and android together through wifi or usb
+- Follow its instructions to connect your laptop and android together through wifi or usb.
+  this includes executing from the terminal: adb forward tcp:7777 tcp:7777
 - Test that it works by browsing this web page from your laptop and type some text: [http://localhost:7777/](http://localhost:7777/)
 - Install and run the [latest release of DesktopKeyboard2Android](https://github.com/dportabella/DesktopKeyboard2Android/releases)
 - What you type now in your laptop, it will be forwarded to your Android

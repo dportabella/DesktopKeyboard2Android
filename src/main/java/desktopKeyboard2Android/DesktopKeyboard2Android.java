@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -16,10 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import java.util.List;
-
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /*
 How can I predict whether a key_pressed event will be followed by a key_typed event?
@@ -35,7 +32,7 @@ I've implemented this logic based on experimenting.
 - note for instance, the enter (0x0A), the backspace (0x08), the space (0x20) keys produce both a key_pressed/key_released and a key_typed event.
 */
 public class DesktopKeyboard2Android extends Application {
-    final static Logger logger = LoggerFactory.getLogger(DesktopKeyboard2Android.class);
+    TextArea infoWindow;
 
     final int LAST_KEY_CODE_AS_CONTROL_EVENT = KeyCode.DOWN.impl_getCode(); // 0x28
     final int LAST_CHAR_AS_CONTROL_EVENT = (int) ' '; // 0x20
@@ -55,7 +52,11 @@ public class DesktopKeyboard2Android extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Keyboard");
-        Scene scene = new Scene(new Label(), 300, 275);
+        infoWindow = new TextArea();
+        infoWindow.setText(instrauctions);
+        infoWindow.setEditable(false);
+        infoWindow.setDisable(true);    // todo: how to be enabed but stop receiving key events?
+        Scene scene = new Scene(infoWindow, 600, 400);
         primaryStage.setScene(scene);
 
         scene.setOnKeyPressed((KeyEvent e) -> {
@@ -105,19 +106,19 @@ public class DesktopKeyboard2Android extends Application {
     private int keySequence = 30000;
 
     private void sendKeyTyped(String str) {
-        logger.debug("key_typed, char: " + str);
+        addInfo("key_typed, char: " + str);
         int c = str.codePointAt(0);   // todo: is it possible to have more than one?
         int androidChar = (c == ENTER_CODE_POINT) ? ENTER_ANDROID_CODE_POINT : c;
         sendKeyEvent("C" + androidChar);
     }
 
     private void sendKeyPressed(KeyCode keyCode) {
-        logger.debug("key_pressed, code: " + keyCodeToString(keyCode));
+        addInfo("key_pressed, code: " + keyCodeToString(keyCode));
         sendKeyEvent("D" + keyCode.impl_getCode());
     }
 
     private void sendKeyReleased(KeyCode keyCode) {
-        logger.debug("key_released, code: " + keyCodeToString(keyCode));
+        addInfo("key_released, code: " + keyCodeToString(keyCode));
         sendKeyEvent("U" + keyCode.impl_getCode());
     }
 
@@ -128,11 +129,11 @@ public class DesktopKeyboard2Android extends Application {
         try {
             lines = httpRequest(url);
         } catch (IOException e) {
-            warn(new IOException("connection to androidWifiKeyboard app failed", e));
+            addInfo("connection to androidWifiKeyboard app failed");
             return;
         }
         if (lines.size() != 1 || !"ok".equals(lines.get(0))) {
-            warn(new Exception("unexpected response from android WifiKeyboard app: " + lines));
+            addInfo("unexpected response from android WifiKeyboard app: " + lines);
         }
     }
 
@@ -143,11 +144,21 @@ public class DesktopKeyboard2Android extends Application {
         }
     }
 
-    private void warn(Throwable e) {
-        logger.warn(e.toString());
+    private void addInfo(String text) {
+        infoWindow.appendText(text + "\n");
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
+    final static String instrauctions =
+            "DesktopKeyboard2Android\n" +
+                    "Use your laptop's keyboard for typing in your Android phone\n" +
+                    "https://github.com/dportabella/DesktopKeyboard2Android/\n\n" +
+                    "- Install the WifiPassword app: https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en\n" +
+                    "- Follow its instructions to connect your laptop and android together through wifi or usb.\n" +
+                    "  this includes executing from the terminal: adb forward tcp:7777 tcp:7777\n" +
+                    "- Test that it works by browsing this web page from your laptop and type some text: http://localhost:7777/\n" +
+                    "- What you type here now, it will be forwarded to your Android\n\n";
 }
