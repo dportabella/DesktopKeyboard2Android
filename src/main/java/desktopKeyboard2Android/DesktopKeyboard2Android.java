@@ -49,6 +49,8 @@ public class DesktopKeyboard2Android extends Application {
      */
     KeyCode lastIgnoredKeyCode = null;
 
+    private int keySequence = 0;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Keyboard");
@@ -103,10 +105,13 @@ public class DesktopKeyboard2Android extends Application {
         return sp.toString();
     }
 
-    private int keySequence = 30000;
+    private String keyCharToString(String c) {
+        return "[char: " + c + ", codePoint: " + c.codePointAt(0) + "]";
+    }
+
 
     private void sendKeyTyped(String str) {
-        addInfo("key_typed, char: " + str);
+        addInfo("key_typed, char: " + keyCharToString(str));
         int c = str.codePointAt(0);   // todo: is it possible to have more than one?
         int androidChar = (c == ENTER_CODE_POINT) ? ENTER_ANDROID_CODE_POINT : c;
         sendKeyEvent("C" + androidChar);
