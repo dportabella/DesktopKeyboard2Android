@@ -1,39 +1,33 @@
+/*
+This program, DesktopKeyboard2Android, captures the key events and forwards it to the Android WifiKeyboard app, through Wifi or USB.
+It gets the key events received from the laptop, and transform and forward them to WifiKeyboard app accordingly.
+This involves mainly, but not only, filtering out some of the KeyPressed/KeyReleased and KeyTyped events.
+Because of a lack of documentation about it, the logic implemented here has been based on experimenting, trail and error,
+and so it might not work in all systems and keyboards.
+See the README.md for my information.
+
+https://github.com/dportabella/DesktopKeyboard2Android
+*/
+
 package desktopKeyboard2Android;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javafx.scene.control.TextArea;
 
-import java.net.URL;
-import java.net.HttpURLConnection;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.List;
-
-/*
-How can I predict whether a key_pressed event will be followed by a key_typed event?
-http://stackoverflow.com/questions/32897191/how-can-i-predict-whether-a-key-pressed-event-will-be-followed-by-a-key-typed-ev
-
-I didn't find doc about this;
-it seems that I cannot decide based on keyCode classes (function, navigation, arrow...)
-I've implemented this logic based on experimenting.
-
-- note that LAST_CHAR_AS_CONTROL_EVENT < LAST_KEY_CODE_AS_CONTROL_EVENT!
-  for instance, typing the Up arrow, produces the KeyCode.UP = 0x26, while typing the char '&' also produces the char 0x26;
-
-- note for instance, the enter (0x0A), the backspace (0x08), the space (0x20) keys produce both a key_pressed/key_released and a key_typed event.
-*/
 public class DesktopKeyboard2Android extends Application {
-    TextArea infoWindow;
-
     final int LAST_KEY_CODE_AS_CONTROL_EVENT = KeyCode.DOWN.impl_getCode(); // 0x28
     final int LAST_CHAR_AS_CONTROL_EVENT = (int) ' '; // 0x20
 
@@ -41,23 +35,25 @@ public class DesktopKeyboard2Android extends Application {
     final int ENTER_CODE_POINT = 13;
     final int ENTER_ANDROID_CODE_POINT = 10;
 
+    private TextArea infoWindow;
+
     /* used to store and, if necessary, later forward a key used with modifiers (such as Crtl)
      * that has not been translated to a usefull typed key.
      * For instance:
      *   Crtl-V produces a KeyTyped event that is not forwarded. So lastIgnoredKeyCode will be forwarded.
      *   Alt-g in a Swiss-French keyboard produces a KeyTyped event (@ character) that is forwarded. So lastIgnoredKeyCode will not be forwarded.
      */
-    KeyCode lastIgnoredKeyCode = null;
+    private KeyCode lastIgnoredKeyCode = null;
 
     private int keySequence = 0;
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Keyboard");
-        infoWindow = new TextArea();
+
+        infoWindow = createInfoWindow();
         infoWindow.setText(instrauctions);
-        infoWindow.setEditable(false);
-        infoWindow.setDisable(true);    // todo: how to be enabed but stop receiving key events?
+
         Scene scene = new Scene(infoWindow, 600, 400);
         primaryStage.setScene(scene);
 
@@ -89,6 +85,13 @@ public class DesktopKeyboard2Android extends Application {
         primaryStage.show();
     }
 
+    private static TextArea createInfoWindow() {
+        TextArea infoWindow = new TextArea();
+        infoWindow.setEditable(false);
+        infoWindow.setDisable(true);
+        return infoWindow;
+    }
+
     private boolean handleAsControlEvent(KeyCode keyCode) {
         int code = keyCode.impl_getCode();
         return (code != ENTER_KEY_CODE && code <= LAST_KEY_CODE_AS_CONTROL_EVENT);
@@ -99,32 +102,31 @@ public class DesktopKeyboard2Android extends Application {
                 || (c.length() > 0 && (c.length() > 1 || c.charAt(0) > LAST_CHAR_AS_CONTROL_EVENT)));
     }
 
-    private String keyCodeToString(KeyCode keyCode) {
-        StringBuffer sp = new StringBuffer();
-        sp.append("[name: " + keyCode.getName() + ", code: " + keyCode.impl_getCode() + ", char: " + keyCode.impl_getChar() + "]");
-        return sp.toString();
+    private void sendKeyPressed(KeyCode keyCode) {
+        addInfo("D[" + keyCodeToString(keyCode) + "]");
+        sendKeyEvent("D" + keyCode.impl_getCode());
     }
 
-    private String keyCharToString(String c) {
-        return "[char: " + c + ", codePoint: " + c.codePointAt(0) + "]";
+    private void sendKeyReleased(KeyCode keyCode) {
+        addInfo("U[" + keyCodeToString(keyCode) + "]");
+        sendKeyEvent("U" + keyCode.impl_getCode());
     }
-
 
     private void sendKeyTyped(String str) {
-        addInfo("key_typed, char: " + keyCharToString(str));
+        addInfo("C[" + keyCharToString(str) + "]");
         int c = str.codePointAt(0);   // todo: is it possible to have more than one?
         int androidChar = (c == ENTER_CODE_POINT) ? ENTER_ANDROID_CODE_POINT : c;
         sendKeyEvent("C" + androidChar);
     }
 
-    private void sendKeyPressed(KeyCode keyCode) {
-        addInfo("key_pressed, code: " + keyCodeToString(keyCode));
-        sendKeyEvent("D" + keyCode.impl_getCode());
+    private String keyCodeToString(KeyCode keyCode) {
+        return keyCode.getName() + ":" + keyCode.impl_getCode();
     }
 
-    private void sendKeyReleased(KeyCode keyCode) {
-        addInfo("key_released, code: " + keyCodeToString(keyCode));
-        sendKeyEvent("U" + keyCode.impl_getCode());
+    private String keyCharToString(String c) {
+        String cStr = c.replaceAll("\r", "");
+        String codePointStr = (c.length() == 0) ? "(none)" : String.valueOf(c.codePointAt(0));
+        return cStr + ":" + codePointStr;
     }
 
     private void sendKeyEvent(String keyEventString) {
