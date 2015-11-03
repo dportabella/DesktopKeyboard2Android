@@ -24,7 +24,7 @@ You may want to use a hot key (eg Alt+Cmd+X) to launch or re-activate DesktopKey
 ## Compile
 To debug this application:
 
-    $ git clone git remote add origin https://github.com/dportabella/DesktopKeyboard2Android.git
+    $ git clone https://github.com/dportabella/DesktopKeyboard2Android.git
     $ cd DesktopKeyboard2Android
     $ mvn exec:java -Dexec.mainClass="desktopKeyboard2Android.DesktopKeyboard2Android"
 

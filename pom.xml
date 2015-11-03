@@ -12,6 +12,12 @@
         <name>David Portabella</name>
     </organization>
 
+    <scm>
+        <url>https://github.com/dportabella/DesktopKeyboard2Android.git</url>
+        <connection>scm:git:git@github.com:tobrien/git-demo.git</connection>
+        <developerConnection>scm:git:git@github.com:dportabella/DesktopKeyboard2Android.git</developerConnection>
+    </scm>
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -46,6 +52,11 @@
                 <configuration>
                     <mainClass>desktopKeyboard2Android.DesktopKeyboard2Android</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
             </plugin>
         </plugins>
     </build>

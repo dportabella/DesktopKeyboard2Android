@@ -163,7 +163,7 @@ public class DesktopKeyboard2Android extends Application {
             "DesktopKeyboard2Android\n" +
                     "Use your laptop's keyboard for typing in your Android phone\n" +
                     "https://github.com/dportabella/DesktopKeyboard2Android/\n\n" +
-                    "- Install the WifiPassword app: https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en\n" +
+                    "- Install the WifiKeyboard app: https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en\n" +
                     "- Follow its instructions to connect your laptop and android together through wifi or usb.\n" +
                     "  this includes executing from the terminal: adb forward tcp:7777 tcp:7777\n" +
                     "- Test that it works by browsing this web page from your laptop and type some text: http://localhost:7777/\n" +
