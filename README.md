@@ -13,28 +13,58 @@ This project replaces "the client", while still using the android app. The diffe
 ## Use
 - Install the [WifiKeyboard](https://play.google.com/store/apps/details?id=com.volosyukivan&hl=en) app
 - Follow its instructions to connect your laptop and android together through wifi or usb.
-  this includes executing from the terminal: adb forward tcp:7777 tcp:7777
+  This includes executing from the terminal: `adb forward tcp:7777 tcp:7777`
 - Test that it works by browsing this web page from your laptop and type some text: [http://localhost:7777/](http://localhost:7777/)
 - Install and run the [latest release of DesktopKeyboard2Android](https://github.com/dportabella/DesktopKeyboard2Android/releases)
 - What you type now in your laptop, it will be forwarded to your Android
 
-You may want to use a hot key (eg Alt+Cmd+X) to launch or re-activate DesktopKeyboard2Android. Follow the instructions for [OSX](http://www.cnet.com/news/how-to-use-hot-keys-to-launch-applications-in-os-x/) or [MsWindows](https://www.google.com/search?hl=en&q=How+to+use+hot+keys+to+launch+applications+in+Ms+Windows).
+You may want to use a hot key (eg Alt+Cmd+X) to launch or re-activate DesktopKeyboard2Android. Follow the instructions for [OSX](http://www.cnet.com/news/how-to-use-hot-keys-to-launch-applications-in-os-x/), [MsWindows](https://www.google.com/search?hl=en&q=How+to+use+hot+keys+to+launch+applications+in+Ms+Windows) or [Linux](https://www.google.com/search?hl=en&q=How+to+use+hotkeys+to+launch+applications+in+Linux).
 
 
 ## Compile
-To debug this application:
+
+### Retrieve source code
 
     $ git clone https://github.com/dportabella/DesktopKeyboard2Android.git
     $ cd DesktopKeyboard2Android
+
+### Execute from source code
+
+To debug this application:
+
     $ mvn exec:java -Dexec.mainClass="desktopKeyboard2Android.DesktopKeyboard2Android"
 
 To show the java key events and understand how they are filtered and mapped for Android:
 
     $ mvn exec:java -Dexec.mainClass="desktopKeyboard2Android.ShowJavaKeyEvents"
 
-To build the installer for this application:
+### Build a native installer
 
     $ mvn jfx:native
+
+#### Java Multi-OS executable
+
+    $ java -jar target/jfx/app/DesktopKeyboard2Android-1.1-SNAPSHOT-jfx.jar
+
+#### Linux Debian/Ubuntu package
+
+Install the Debian package:
+
+    $ sudo dpkg -i target/jfx/native/desktopkeyboard2android-1.1.deb
+
+Start from command line:
+
+    $ /opt/DesktopKeyboard2Android/DesktopKeyboard2Android
+
+Start from Unity launcher: search for "DesktopKeyboard2Android" (it's case insensitive).
+
+Start from other desktop: the application is installed under "All Applications" or "Unknown" category.
+
+There is a desktop starter available in `/opt/DesktopKeyboard2Android/DesktopKeyboard2Android.desktop`.
+If you copy it to `~/Desktop/` or `~/.local/share/applications/`, then you should edit it to add `Hidden=false`.
+You can also drag n' drop from nautilus to the Unity bar.
+
+#### Windows
 
 For creating the installer on MsWindows, you may need to download and install “Inno Setup 5” or later, see the output of the previous command. No requirements for OSX.
 
