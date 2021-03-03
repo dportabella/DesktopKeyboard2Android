@@ -64,6 +64,18 @@ There is a desktop starter available in `/opt/DesktopKeyboard2Android/DesktopKey
 If you copy it to `~/Desktop/` or `~/.local/share/applications/`, then you should edit it to add `Hidden=false`.
 You can also drag n' drop from nautilus to the Unity bar.
 
+#### Building using Docker
+
+To build using docker clone the project and then run the following commands:
+
+```
+sudo docker build . -tbuilddesktopkeyboard2android -f ./Dockerfile-linuxbuild
+sudo docker create --name builddesktopkeyboard2android builddesktopkeyboard2android:latest
+sudo docker cp builddesktopkeyboard2android:/DesktopKeyboard2Android/target /tmp/
+sudo docker rm builddesktopkeyboard2android
+sudo docker rmi builddesktopkeyboard2android
+```
+
 #### Windows
 
 For creating the installer on MsWindows, you may need to download and install “Inno Setup 5” or later, see the output of the previous command. No requirements for OSX.

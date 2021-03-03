@@ -1,0 +1,8 @@
+FROM debian:10
+RUN apt update && apt install -y git wget sudo fakeroot
+RUN apt update && apt install -y java-common libgl1-mesa-glx libxxf86vm1 libcairo2 libgdk-pixbuf2.0-0 libpango1.0-0 libglib2.0-0 libatk1.0-0 libgtk2.0-0 libfontconfig1 libxtst6 libxrender1 libxi6 libasound2 maven 
+RUN TEMP_DEB="$(mktemp)" && wget -O "$TEMP_DEB" 'https://cdn.azul.com/zulu/bin/zulu8.52.0.23-ca-fx-jdk8.0.282-linux_amd64.deb' && sudo dpkg -i "$TEMP_DEB" && rm -f "$TEMP_DEB"
+RUN git clone https://github.com/dportabella/DesktopKeyboard2Android.git
+WORKDIR DesktopKeyboard2Android
+COPY settings.xml .
+RUN mvn jfx:native -e -s"./settings.xml"
